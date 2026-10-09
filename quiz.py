@@ -79,7 +79,10 @@ def save(st):
 def draw(mod=None, n_wrong=False, include2026=False):
     idx, st = load()
     done = set(st["done"])
-    pool = [q for q in idx if q["id"] not in done]
+    done_qids = {q.get("qid") for q in idx
+                 if q["id"] in done and q.get("qid")}
+    pool = [q for q in idx if q["id"] not in done
+            and q.get("qid") not in done_qids]
     if n_wrong:
         w = set(st["wrong"])
         pool = [q for q in pool if q["id"] in w] or \
